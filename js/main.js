@@ -14,7 +14,48 @@ const state = {
 
 function createGame() {
     function movePlayer(command) {
-        console.log(`Moving ${command.playerId} with ${command.keyPressed}`)
+        console.log(`game.movePlayer() -> Moving ${command.playerId} with ${command.keyPressed}`)
+        
+        const acceptedMoves = {
+            ArrowUp(player) {
+                console.log(`game.movePlayer() -> Moving player Up`);
+
+                if(player.y - 1 >= 0){
+                    player.y = player.y - 1;
+                }
+            },
+            ArrowRight(player) {
+                console.log(`game.movePlayer() -> Moving player Right`);
+
+                if(player.x + 1 < screen.width){
+                    player.x = player.x + 1;
+                }
+            },
+            ArrowDown(player) {
+                console.log(`game.movePlayer() -> Moving player Down`);
+
+                if(player.y + 1 < screen.height){
+                    player.y = player.y + 1;
+                }
+            },
+            ArrowLeft(player) {
+                console.log(`game.movePlayer() -> Moving player Left`);
+
+                if(player.x - 1 >= 0){
+                    player.x = player.x - 1;
+                }
+            }
+        };
+
+        const keyPressed = command.keyPressed;
+        const player = state.players[command.playerId];
+        const moveFunction = acceptedMoves[keyPressed];
+
+        if(moveFunction) {
+            moveFunction(player);
+        }
+        
+        return; //TEMP
     };
 
     return {
@@ -37,7 +78,7 @@ function createKeyboardListener(params) {
     };
 
     function notfyAll(command) {
-        console.log(`Notifing ${state.observers.length} observers`);
+        console.log(`KeyboardListener -> Notifing ${state.observers.length} observers`);
 
         for (const observerFunction of state.observers) {
             observerFunction(command);
